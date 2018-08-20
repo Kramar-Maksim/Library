@@ -9,10 +9,10 @@ namespace Domain.Repository
     //Generic Repository that implement CRUD operations
     public class EFGenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        LibraryContext context;
+        ApplicationContext context;
         DbSet<TEntity> genericEntity;
 
-        public EFGenericRepository(LibraryContext _context)
+        public EFGenericRepository(ApplicationContext _context)
         {
             this.context = _context;
             genericEntity = context.Set<TEntity>();
@@ -22,14 +22,14 @@ namespace Domain.Repository
         public void Create(TEntity item)
         {
             genericEntity.Add(item);
-           // context.SaveChanges();
+            // context.SaveChanges();
         }
 
-        public void Delete(int? id)
+        public void Delete(int id)
         {
-            var item = genericEntity.Find(id.Value);
+            var item = genericEntity.Find(id);
             genericEntity.Remove(item);
-           // context.SaveChanges();
+            // context.SaveChanges();
         }
 
         public IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
@@ -38,6 +38,10 @@ namespace Domain.Repository
         }
 
         public TEntity Get(int id)
+        {
+            return genericEntity.Find(id);
+        }
+        public TEntity GetByIDstr(string id)
         {
             return genericEntity.Find(id);
         }
@@ -50,10 +54,9 @@ namespace Domain.Repository
         public void Update(TEntity item)
         {
             context.Entry(item).State = EntityState.Modified;
-          //  context.SaveChanges();
+            //  context.SaveChanges();
         }
-        
- 
+
     }
 
 }

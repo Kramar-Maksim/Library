@@ -6,30 +6,29 @@ using Domain.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BLL.Services
 {
     public class LibrarianService : ILibrarian, IService<ClientDTO>
     {
-        IUnitOfWork Database { get; set; }
+        EFUnitOfWork Database { get; set; }
 
-        public LibrarianService(IUnitOfWork uow)
+        public LibrarianService(EFUnitOfWork uow)
         {
             Database = uow;
         }
 
 
-        public IEnumerable<BookDTO> GetBookList()                        // Get books from database
+        public IEnumerable<BookDTO> GetBookList()                                      // Get books from database
         {
             IEnumerable<Book> books = Database.Books.GetAll();
 
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>()).CreateMapper();
-            var booksDTO = mapper.Map<IEnumerable<Book>, IEnumerable<BookDTO>>(books);
-
-            return booksDTO;
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>()).CreateMapper(); 
+            return mapper.Map<IEnumerable<Book>, IEnumerable<BookDTO>>(books);
         }
-         
-        public void GiveTheBook(OrderDTO orderDto)                       //give book to client, from list of orders
+
+        public async Task GiveTheBook(OrderDTO orderDto)                                     //give book to client, from list of orders
         {
             int maxBooksInOneHand = 5;                                                 //max book that librarian can give to one person              
             bool BookExist = false;
@@ -40,33 +39,35 @@ namespace BLL.Services
                     BookExist = true;
 
 
-            Client client = Database.Clients.Get(orderDto.Clientdto.ClientID);         //geting from database objects(client, book, order)
+            Client client = Database.Clients.GetByIDstr(orderDto.Clientdto.ClientID);         //geting from database objects(client, book, order)
+            
             Book curentBook = Database.Books.Get(orderDto.OrderedBook.BookId);
+
             Order order = Database.Orders.Get(orderDto.OrderID);
 
-            if (client.OrderedBooks.Count() < maxBooksInOneHand)
-                //my expeption TODO
-                throw new Exception();                                                 // you cant give more books to this person limit is  " maxBooksInOneHand "
+
+            //if (client.OrderedBooks.Count() < maxBooksInOneHand)
+            //    //my expeption TODO
+            //    throw new Exception();                                                 // you cant give more books to this person limit is  " maxBooksInOneHand "
 
 
             if (BookExist)
             {
                 client.OrderedBooks.Add(curentBook);                                   //adding book to Clients Order List of Books
-                client.DesiredBooks.Remove(Mapper.Map<OrderDTO, Order>(orderDto));     //remove order from clients wish book
-
+                                                                                       // client.DesiredBooks.Remove(Mapper.Map<OrderDTO, Order>(orderDto));     //remove order from clients wish book
                 order.OrderDate = DateTime.Now;
-                order.IsGiven = true;
+                order.IsGiven = true; 
 
                 Database.Clients.Update(client);                                       //updating Clients information in database
                 Database.Orders.Update(order);
-                Database.SaveAsync();
+                await Database.SaveAsync();
             }
             else
                 throw new ArgumentNullException();                                    //Book Not Found 
         }
 
-        public IEnumerable<OrderDTO> TracingOfDebtors()                               //returns orders where you can find Client ID and book which was taken
-        { 
+        public IEnumerable<OrderDTO> TracingOfDebtors()                                //returns orders where you can find Client ID and book which was taken
+        {
             IEnumerable<Order> Debtors = from orders in Database.Orders.GetAll()
                                          where orders.OrderDate.Day > DateTime.Now.Day + 7   //book was taken more then 7 days ago
                                          select orders;
@@ -74,7 +75,7 @@ namespace BLL.Services
             return Mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(Debtors);
         }
 
-        public IEnumerable<OrderDTO> OrdersForAccepting()                             // List of Orders thet are whaiting for librarian acception
+        public IEnumerable<OrderDTO> OrdersForAccepting()                              // List of Orders thet are whaiting for librarian acception
         {
             IEnumerable<Order> NewOrders = from orders in Database.Orders.GetAll()
                                            where orders.IsGiven == false              //orders that are whaiting for acception
@@ -83,11 +84,12 @@ namespace BLL.Services
             return Mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(NewOrders);
         }
 
+
         public IEnumerable<ClientDTO> GetItems()                                       //Get list of clients
         {
             IEnumerable<Client> clients = Database.Clients.GetAll();
             return Mapper.Map<IEnumerable<Client>, IEnumerable<ClientDTO>>(clients);
-        }      
+        }
 
         public ClientDTO GetItem(int? id)                                              //get client by ID
         {
@@ -100,31 +102,33 @@ namespace BLL.Services
                 throw new ArgumentNullException();
 
             return (Mapper.Map<Client, ClientDTO>(client));
-        }              
+        }
 
-        public void CreateItem(ClientDTO ItemDTO)                                      //Create new client
+        public async Task CreateItem(ClientDTO ItemDTO)                                //Create new client
         {
             if (ItemDTO == null)
                 throw new ArgumentNullException();
 
             Database.Clients.Create(Mapper.Map<ClientDTO, Client>(ItemDTO));
-            Database.SaveAsync();
-        }    
+            await Database.SaveAsync();
+        }
 
-        public void EditItem(ClientDTO ItemDTO)                                        // change client profile information
+        public async Task EditItem(ClientDTO ItemDTO)                                  // change client profile information
         {
             if (ItemDTO == null)
                 throw new ArgumentNullException();
 
             Database.Clients.Update(Mapper.Map<ClientDTO, Client>(ItemDTO));
-            Database.SaveAsync();
+            await Database.SaveAsync();
         }
 
-        public void DeleteItem(int? id)                                                // delete client by id
+        public async Task DeleteItem(int? id)                                          // delete client by id
         {
             Database.Clients.Delete(id.Value);
-            Database.SaveAsync();
+            await Database.SaveAsync();
         }
+
+
 
         //public void GiveTheBook(int? Bookid, ClientDTO currentClientDto)
         //{

@@ -19,28 +19,15 @@ namespace WebApi_Library.Controllers
             _context = service;
         }
 
-        //[HttpGet]
-        //public IHttpActionResult Profile(int id)        //returns information about user
-        //{
-        //    var u = User.Identity.Name;
-
-        //    var user = _context.MyProfile(id);
-
-        //    if (user == null)
-        //        return BadRequest();
-
-        //    return Ok(user);
-        //}
-
-
         [HttpGet]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "client")]
+        [Route("api/Client/Profile")]
         public IHttpActionResult Profile()
         {
             // var u = User.Identity.Name;         //can use to take information from clients table
             //_context.GetItem(User.Identity.Name);
 
-            return Ok("Values [z[z");
+            return Ok(User.Identity.Name);
         }
 
     }

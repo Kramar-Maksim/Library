@@ -6,57 +6,58 @@ using Domain.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using BLL.Infrastructure;
+using System.Threading.Tasks;
 
 namespace BLL.Services
 {
     public class ClientService : IClientService
     {
-        IUnitOfWork Database { get; set; }
+        EFUnitOfWork Database { get; set; }
 
-        public ClientService(IUnitOfWork uow)
+        public ClientService(EFUnitOfWork uow)
         {
             Database = uow;
         }
 
 
-        public ClientDTO MyProfile(int? name)                  //get information about user
+        public ClientDTO MyProfile(int? id)                  //get information about user
         {
-            if (name == null)
-                throw new ArgumentNullException();
+            //if (id == null)
+            //    throw new ArgumentNullException();
 
-            Client client = Database.Clients.Get(name.Value);
+            //Client client = Database.Clients.Get(id);
 
-            if (client == null)
-                throw new ArgumentNullException();
+            //if (client == null)
+            //    throw new ArgumentNullException();
 
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Client, ClientDTO>()).CreateMapper();
-            return mapper.Map<Client, ClientDTO>(Database.Clients.Get(client.ClientID));
-        } 
+            //var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Client, ClientDTO>()).CreateMapper();
+            //return mapper.Map<Client, ClientDTO>(Database.Clients.Get(client.Id));
+            return new ClientDTO();
+        }
 
         public IEnumerable<ClientDTO> GetItems()
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Client, ClientDTO>()).CreateMapper();
-
-            return mapper.Map<IEnumerable<Client>, List<ClientDTO>>(Database.Clients.GetAll()); 
+            return mapper.Map<IEnumerable<Client>, List<ClientDTO>>(Database.Clients.GetAll());
         }
 
-        public void CreateItem(ClientDTO ItemDTO)
+        public async Task CreateItem(ClientDTO ItemDTO)
         {
             if (ItemDTO == null)
                 throw new ArgumentNullException();
-             
+
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<ClientDTO, Client>()).CreateMapper();
             Database.Clients.Create(mapper.Map<ClientDTO, Client>(ItemDTO));
-            Database.SaveAsync();
+            await Database.SaveAsync();
         }
 
-        public void EditItem(ClientDTO ItemDTO)
+        public async Task EditItem(ClientDTO ItemDTO)
         {
             if (ItemDTO == null)
                 throw new ArgumentNullException();
 
             Database.Clients.Update(Mapper.Map<ClientDTO, Client>(ItemDTO));
-            Database.SaveAsync();
+            await Database.SaveAsync();
         }
 
         public ClientDTO GetItem(int? id)
@@ -73,10 +74,11 @@ namespace BLL.Services
             return mapper.Map<Client, ClientDTO>(Database.Clients.Get(id.Value));
         }
 
-        public void DeleteItem(int? id)
-        { 
-            Database.Clients.Delete(id);
-            Database.SaveAsync();
+        public async Task DeleteItem(int? id)
+        {
+            Database.Clients.Delete(id.Value);
+            await Database.SaveAsync();
         }
+
     }
 }

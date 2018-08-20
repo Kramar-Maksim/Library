@@ -1,19 +1,17 @@
 ﻿using BLL.DTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BLL.Interfaces
 {
     public interface ILibrarian
     {
-        IEnumerable<BookDTO> GetBookList(); 
+        IEnumerable<BookDTO> GetBookList();
 
-        void GiveTheBook(OrderDTO order);
+        Task GiveTheBook(OrderDTO order);
 
         IEnumerable<OrderDTO> TracingOfDebtors();
 
         IEnumerable<OrderDTO> OrdersForAccepting();
-
-
-        //void GiveTheBook(int? Bookid, ClientDTO currentClientDto);
     }
 }

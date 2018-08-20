@@ -53,19 +53,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entitys\ApplicationRole.cs" />
+    <Compile Include="Entitys\ApplicationUser.cs" />
     <Compile Include="Entitys\Book.cs" />
     <Compile Include="Entitys\Client.cs" />
-    <Compile Include="Entitys\LibraryContext.cs" />
+    <Compile Include="Entitys\ApplicationContext.cs" />
     <Compile Include="Entitys\Order.cs" />
-    <Compile Include="Migrations\201808172313534_Initial.cs" />
-    <Compile Include="Migrations\201808172313534_Initial.Designer.cs">
-      <DependentUpon>201808172313534_Initial.cs</DependentUpon>
+    <Compile Include="Identity\ApplicationRoleManager.cs" />
+    <Compile Include="Identity\ApplicationUserManager.cs" />
+    <Compile Include="Migrations\201808201741583_Initial.cs" />
+    <Compile Include="Migrations\201808201741583_Initial.Designer.cs">
+      <DependentUpon>201808201741583_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="UnitOfWork\ClientManager.cs" />
     <Compile Include="UnitOfWork\EFUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IClientManager.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,8 +79,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201808172313534_Initial.resx">
-      <DependentUpon>201808172313534_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808201741583_Initial.resx">
+      <DependentUpon>201808201741583_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

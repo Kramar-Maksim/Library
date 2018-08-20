@@ -5,8 +5,9 @@ using BLL.Interfaces;
 
 namespace WebApi_Library.Controllers
 {
+    //[Authorize(Roles = "client")]
     public class OrderController : ApiController
-    { 
+    {
         private IOrderService _context;
 
         public OrderController(IOrderService service)
@@ -16,13 +17,12 @@ namespace WebApi_Library.Controllers
 
 
         [HttpPost]
-        public IHttpActionResult MakeOrder(BookDTO book, ClientDTO client)
+        public IHttpActionResult MakeOrder(BookDTO book)        //Client can Make order so librarian can give it to client
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-             
-            _context.MakeOrder(book, client);
 
+            _context.MakeOrder(book, User.Identity.Name);
 
             return Created(new Uri(Request.RequestUri + "/" + book.Title), book.Title);
         }

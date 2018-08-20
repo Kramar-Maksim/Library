@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
@@ -6,12 +7,18 @@ namespace Domain.Entities
     {
         public int OrderID { get; set; }
 
+        [Required]
         public Book OrderedBook { get; set; }
 
+        [Required]
         public Client ClientOrder { get; set; }
 
+        [Required]
         public DateTime OrderDate { get; set; }
 
+        /// <summary>
+        /// boolean, shows if librarian serve the order or not
+        /// </summary>
         public bool IsGiven { get; set; }
     }
 }

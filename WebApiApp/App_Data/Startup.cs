@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin;
+﻿using BLL.Interfaces;
+using BLL.Services;
+using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
@@ -7,13 +9,15 @@ using System.Web.Http;
 [assembly: OwinStartup(typeof(WebApi_Library.Startup))]
 
 namespace WebApi_Library
-{ 
+{
     public class Startup
     {
+        IServiceCreator serviceCreator = new ServiceCreator();
         public void Configuration(IAppBuilder app)
-        {
-            // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
-            //enable cors origin requests
+        { 
+           
+            app.CreatePerOwinContext<IUserService>(CreateUserService);
+
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             var myProvider = new MyAuthorizationServerProvider();
@@ -30,6 +34,10 @@ namespace WebApi_Library
 
             HttpConfiguration config = new HttpConfiguration();
             WebApiConfig.Register(config);
+        }
+        private IUserService CreateUserService()
+        {
+            return serviceCreator.CreateUserService();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace WebApi_Library.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new ServiceModule("DefaultConnection"));
+            var kernel = new StandardKernel( );
             try
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -71,7 +71,7 @@ namespace WebApi_Library.App_Start
             kernel.Bind<IClientService>().To<ClientService>();
             kernel.Bind<ILibrarian>().To<LibrarianService>();
             kernel.Bind<IOrderService>().To<OrderService>();
-
+            kernel.Bind<IUserService>().To<UserService>(); 
         }
     }
-}
+} 

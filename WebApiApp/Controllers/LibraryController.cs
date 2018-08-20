@@ -1,73 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BLL.Interfaces;
 using System.Web.Http;
-using BLL.DTO;
-using BLL.Interfaces;
 
 namespace WebApi_Library.Controllers
 {
+    //[Authorize] 
     public class LibraryController : ApiController
     {
         private IBookService _context;
 
         public LibraryController(IBookService service)
         {
-            _context = service; 
+            _context = service;
         }
 
 
         [HttpGet]
-        public IHttpActionResult BookList()
+        public IHttpActionResult BookList()         //returns books from databse
         {
-            return Ok(_context.GetBooks());     //returns books from databse
+            return Ok(_context.GetItems());
         }
 
         [HttpGet]
-        public IHttpActionResult Book(int id)
+        [Route("api/Library/Book{id:int}")]
+        public IHttpActionResult Book(int id)      //returns book(Id) from databse
         {
-            var book = _context.GetBook(id);
+            var book = _context.GetItem(id);
 
             if (book == null)
                 return BadRequest();
 
             return Ok(book);
         }
-        [HttpPost]
-        public IHttpActionResult CreateBook(BookDTO newBook)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest();
-              
-            _context.CreateBook(newBook);
-
-            return Created(new Uri(Request.RequestUri + "/" + newBook.BookId), newBook.Title);
-
-        }
-
-        [HttpPut]
-        public void UpdateBook(int id, BookDTO updateBook)
-        {
-            if (!ModelState.IsValid)
-                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
-
-            var book = _context.GetBook(id);
-            if (book == null)
-                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
-
-            _context.EditBook(updateBook);
-
-        }
-
-        [HttpDelete]
-        public void DeleteBook(int id)
-        {
-            var book = _context.GetBook(id);
-            if (book == null)
-                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
-
-            _context.DeleteBook(id);
-
-        }
-
     }
 }
+
