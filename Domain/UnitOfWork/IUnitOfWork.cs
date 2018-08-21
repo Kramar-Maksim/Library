@@ -12,6 +12,7 @@ namespace Domain.UnitOfWork
         ApplicationRoleManager RoleManager { get; }
 
         Task SaveAsync();
+        void Save();
 
         IRepository<Book> Books { get; }
         IRepository<Client> Clients { get; }

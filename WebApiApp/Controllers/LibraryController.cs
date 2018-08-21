@@ -15,16 +15,16 @@ namespace WebApi_Library.Controllers
 
 
         [HttpGet]
-        public IHttpActionResult BookList()         //returns books from databse
+        public IHttpActionResult BookList()         
         {
-            return Ok(_context.GetItems());
+            return Ok(_context.GetItems());             //returns books from databse
         }
 
         [HttpGet]
         [Route("api/Library/Book{id:int}")]
-        public IHttpActionResult Book(int id)      //returns book(Id) from databse
+        public IHttpActionResult Book(int id)     
         {
-            var book = _context.GetItem(id);
+            var book = _context.GetItem(id);            //returns book(Id) from databse
 
             if (book == null)
                 return BadRequest();

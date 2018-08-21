@@ -17,33 +17,41 @@ namespace BLL.Services
             Database = uow;
         }
 
-
-        public async Task MakeOrder(BookDTO book, string clientName)          // Client make order
+        /// <summary>
+        /// Client make order
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <param name="clientEmail"></param>
+        /// <returns></returns>
+        public async Task MakeOrder(int bookId, string clientEmail)          
         {
-            ApplicationUser user = await Database.UserManager.FindByNameAsync(clientName);
+            ApplicationUser user = await Database.UserManager.FindByEmailAsync(clientEmail);
+            Book book = Database.Books.Get(bookId);
+             
             if (user != null)
             {
                 ClientDTO client = new ClientDTO()
-                {
+                { 
                     Adress = user.ClientProfile.Address,
                     ClientID = user.ClientProfile.Id,
                     Email = user.Email,
                     Name = user.ClientProfile.Name,
                     IdentityId = user.Id,
-                    PhoneNumber = user.PhoneNumber
-                };
-
+                    PhoneNumber = user.PhoneNumber 
+                }; 
                 Order order = new Order()
-                {
-                    OrderedBook = Mapper.Map<BookDTO, Book>(book),               // shows which book client whants to order
-                    ClientOrder = Mapper.Map<ClientDTO, Client>(client),  // shows who order the book
-                    IsGiven = false,                                             // showing that order is waiting for librarian accepting
-                    OrderDate = DateTime.Now
+                {  
+                    IsGiven = false,                                        // showing that order is waiting for librarian accepting
+                    OrderDate = DateTime.Now,
+
+                    ClientOrder_Id = client.ClientID,                       // shows who order the book
+                    OrderBook_Id = book.BookId                              // shows which book client whants to order
                 };
 
-                Database.Orders.Create(order);                                  //adding order to database, where librarian can accept the order 
+                Database.Orders.Create(order);                              //adding order to database, where librarian can accept the order  
                 await Database.SaveAsync();
             }
+         
         }
 
     }

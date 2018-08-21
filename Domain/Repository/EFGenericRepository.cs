@@ -22,7 +22,7 @@ namespace Domain.Repository
         public void Create(TEntity item)
         {
             genericEntity.Add(item);
-            // context.SaveChanges();
+           // context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -57,6 +57,7 @@ namespace Domain.Repository
             //  context.SaveChanges();
         }
 
+    
     }
 
 }

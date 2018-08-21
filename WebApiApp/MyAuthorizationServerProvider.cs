@@ -10,7 +10,9 @@ using System.Web;
 namespace WebApi_Library
 {
     public class MyAuthorizationServerProvider : OAuthAuthorizationServerProvider
-    { 
+    {
+        //validate the credentials of users and if we found valid credential
+        //generate the signed token, using which user can access authorized resources of server
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
@@ -41,11 +43,11 @@ namespace WebApi_Library
             get { return HttpContext.Current.GetOwinContext().Authentication; }
         }
 
+        //validating client app
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             context.Validated();
-        }
-
+        } 
     }
 
 }

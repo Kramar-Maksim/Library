@@ -7,11 +7,15 @@ namespace Domain.Entities
     {
         public int OrderID { get; set; }
 
+       
+        //public Book OrderedBook { get; set; }
         [Required]
-        public Book OrderedBook { get; set; }
+        public int OrderBook_Id { get; set; }
 
+       
+        //public Client ClientOrder { get; set; }
         [Required]
-        public Client ClientOrder { get; set; }
+        public string ClientOrder_Id { get; set; }
 
         [Required]
         public DateTime OrderDate { get; set; }

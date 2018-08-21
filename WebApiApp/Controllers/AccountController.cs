@@ -12,17 +12,7 @@ using WebApiApp.Models;
 namespace WebApiApp.Controllers
 {
     public class AccountController : ApiController
-    {
-        private IUserService UserService
-        {
-            get { return HttpContext.Current.GetOwinContext().GetUserManager<IUserService>(); }
-        }
-        private IAuthenticationManager AuthenticationManager
-        {
-            get { return HttpContext.Current.GetOwinContext().Authentication; }
-        }
-
-
+    { 
         [HttpPost]
         [Route("api/Account/Register")]
         public async Task<IHttpActionResult> Register(RegisterModel model)
@@ -34,6 +24,7 @@ namespace WebApiApp.Controllers
                 UserDTO userDto = new UserDTO
                 {
                     Email = model.Email,
+                    UserName = model.Email,
                     Password = model.Password,
                     Address = model.Address,
                     Name = model.Name,
@@ -64,7 +55,7 @@ namespace WebApiApp.Controllers
                 Name = "Oksana Volodimirivna",
                 Address = "Kyev",
                 Role = "librarian",
-            }, new List<string> { "user", "librarian" });
+            }, new List<string> { "librarian" });
 
             await UserService.SetInitialData(new UserDTO
             {
@@ -74,9 +65,18 @@ namespace WebApiApp.Controllers
                 Name = "Maksim Kramar",
                 Address = "Kyev",
                 Role = "admin",
-            }, new List<string> { "user", "admin" });
+            }, new List<string> { "admin", "client" });
+ 
         }
 
+        private IUserService UserService
+        {
+            get { return HttpContext.Current.GetOwinContext().GetUserManager<IUserService>(); }
+        }
+        private IAuthenticationManager AuthenticationManager
+        {
+            get { return HttpContext.Current.GetOwinContext().Authentication; }
+        }
     }
 
 }

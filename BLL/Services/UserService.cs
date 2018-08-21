@@ -3,6 +3,7 @@ using BLL.Infrastructure;
 using BLL.Interfaces;
 using Domain.Entities;
 using Domain.UnitOfWork;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,17 +18,21 @@ namespace BLL.Services
             Database = uow;
         }
 
-
+        /// <summary>
+        /// Register User
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
         public async Task<OperationDetails> Create(UserDTO userDto)
         {
             ApplicationUser user = await Database.UserManager.FindByEmailAsync(userDto.Email);  //chack if user allredy exist
-
+             
             if (user == null)
             {
                 user = new ApplicationUser { Email = userDto.Email, UserName = userDto.Email };
                 await Database.UserManager.CreateAsync(user, userDto.Password);
 
-                await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);   // add role
+                await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);   // add role to Db
 
                 // create client profile
                 Client client   = new Client { Id = user.Id, Address = userDto.Address, Name = userDto.Name };
@@ -62,7 +67,12 @@ namespace BLL.Services
         }
 
 
-        // start Initialization BD
+        /// <summary>
+        /// start Initialization BD
+        /// </summary>
+        /// <param name="adminDto"></param>
+        /// <param name="roles"></param>
+        /// <returns></returns>
         public async Task SetInitialData(UserDTO adminDto, List<string> roles)
         {
             foreach (string roleName in roles)
@@ -79,7 +89,7 @@ namespace BLL.Services
 
         public void Dispose()
         {
-            // Database.Dispose();
+            throw new NotImplementedException();
         }
     }
 

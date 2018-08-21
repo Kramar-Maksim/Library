@@ -103,3 +103,5 @@ C:\Users\HP\Desktop\Library\Domain\bin\Debug\Microsoft.AspNet.Identity.EntityFra
 C:\Users\HP\Desktop\Library\Domain\obj\Debug\Domain.csproj.CopyComplete
 C:\Users\HP\Desktop\Library\Domain\obj\Debug\Domain.Migrations.Initial.resources
 C:\Users\HP\Desktop\Library\Domain\obj\Debug\Domain.csproj.GenerateResource.cache
+C:\Users\HP\Desktop\Library\Domain\obj\Debug\Domain.Migrations.addNavPropOrderEntity.resources
+C:\Users\HP\Desktop\Library\Domain\obj\Debug\Domain.Migrations.addNavPropOrderEntity2.resources

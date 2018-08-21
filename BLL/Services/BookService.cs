@@ -18,8 +18,11 @@ namespace BLL.Services
             Database = uow;
         }
 
-
-        public IEnumerable<BookDTO> GetItems()      // Get list of books
+        /// <summary>
+        /// Get list of books
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BookDTO> GetItems()      
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>()).CreateMapper();
             IEnumerable<BookDTO> testsMaped = mapper.Map<IEnumerable<Book>, List<BookDTO>>(Database.Books.GetAll());
@@ -27,19 +30,28 @@ namespace BLL.Services
             return testsMaped;
         }
 
-        public async Task CreateItem(BookDTO bookDTO)     // Create new book
+        /// <summary>
+        /// Create new book
+        /// </summary>
+        /// <param name="bookDTO"></param>
+        /// <returns></returns>
+        public async Task CreateItem(BookDTO bookDTO)
         {
             if (bookDTO == null)
                 throw new ArgumentNullException();
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookDTO, Book>()).CreateMapper();
-            Book book = mapper.Map<BookDTO, Book>(bookDTO);
-
-            Database.Books.Create(book);
+           
+            Database.Books.Create(mapper.Map<BookDTO, Book>(bookDTO));
             await Database.SaveAsync();
         }
 
-        public async Task EditItem(BookDTO bookDTO)       // Change information about the book
+        /// <summary>
+        /// Change information about the book
+        /// </summary>
+        /// <param name="bookDTO"></param>
+        /// <returns></returns>
+        public async Task EditItem(BookDTO bookDTO)       
         {
             if (bookDTO == null)
                 throw new ArgumentNullException();
@@ -49,7 +61,12 @@ namespace BLL.Services
             await Database.SaveAsync();
         }
 
-        public BookDTO GetItem(int? id)             // Get book by id
+        /// <summary>
+        /// Get book by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public BookDTO GetItem(int? id)             
         {
             if (id == null)
                 throw new ArgumentNullException();
@@ -63,7 +80,12 @@ namespace BLL.Services
             return mapper.Map<Book, BookDTO>(Database.Books.Get(id.Value));
         }
 
-        public async Task DeleteItem(int? id)             // Delete book by id
+        /// <summary>
+        /// Delete book by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task DeleteItem(int? id)            
         {
             Database.Books.Delete(id.Value);
             await Database.SaveAsync();

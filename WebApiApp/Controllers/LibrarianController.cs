@@ -53,12 +53,12 @@ namespace WebApi_Library.Controllers
         [HttpPost]
         public IHttpActionResult GiveTheBook(OrderDTO order)    //Librarian can give book to client, client must to make order first
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
+            //if (!ModelState.IsValid)
+            //    return BadRequest();
 
             _libContext.GiveTheBook(order);
 
-            return Created(new Uri(Request.RequestUri + "/" + order.OrderedBook), order.OrderID);
+            return Created( new Uri(Request.RequestUri + "/" + order.IsGiven), order.OrderID);
         }
 
         [HttpPost]

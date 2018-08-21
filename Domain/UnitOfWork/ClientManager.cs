@@ -10,8 +10,7 @@ namespace Domain.UnitOfWork
         {
             Database = db;
         }
-
-
+         
         public void Create(Client item)
         {
             Database.Clients.Add(item);

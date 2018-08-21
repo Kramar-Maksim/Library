@@ -9,7 +9,7 @@ using BLL.Interfaces;
 
 namespace WebApi_Library.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ClientController : ApiController
     {
         private IClientService _context;
@@ -19,13 +19,13 @@ namespace WebApi_Library.Controllers
             _context = service;
         }
 
+
         [HttpGet]
         [Authorize(Roles = "client")]
         [Route("api/Client/Profile")]
         public IHttpActionResult Profile()
-        {
-            // var u = User.Identity.Name;         //can use to take information from clients table
-            //_context.GetItem(User.Identity.Name);
+        { 
+            //_context.GetItem(User.Identity.Name);         //can use to take information from clients table
 
             return Ok(User.Identity.Name);
         }

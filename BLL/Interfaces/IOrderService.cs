@@ -5,6 +5,6 @@ namespace BLL.Interfaces
 {
     public interface IOrderService  
     {
-        Task MakeOrder(BookDTO book, string clientName);
+        Task MakeOrder(int bookId, string clientName);
     }
 }

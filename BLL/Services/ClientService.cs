@@ -20,7 +20,12 @@ namespace BLL.Services
         }
 
 
-        public ClientDTO MyProfile(int? id)                  //get information about user
+        /// <summary>
+        /// get information about user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ClientDTO MyProfile(int? id)                  
         {
             //if (id == null)
             //    throw new ArgumentNullException();

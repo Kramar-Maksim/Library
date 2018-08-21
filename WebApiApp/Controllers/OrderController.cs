@@ -1,4 +1,5 @@
-﻿using System; 
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using BLL.DTO;
 using BLL.Interfaces;
@@ -17,14 +18,16 @@ namespace WebApi_Library.Controllers
 
 
         [HttpPost]
-        public IHttpActionResult MakeOrder(BookDTO book)        //Client can Make order so librarian can give it to client
+        [Route("api/Order/MakeOrder")]
+        public async Task<IHttpActionResult> MakeOrder(BookDTO book)        //Client can Make order so librarian can give it to client
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            _context.MakeOrder(book, User.Identity.Name);
+            await _context.MakeOrder(book.BookId, User.Identity.Name);
 
-            return Created(new Uri(Request.RequestUri + "/" + book.Title), book.Title);
+            //return Created(new Uri(Request.RequestUri + "/" + book.Title), book.Title);
+            return Ok();
         }
     }
 }

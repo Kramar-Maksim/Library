@@ -72,5 +72,9 @@ namespace Domain.UnitOfWork
         {
             await db.SaveChangesAsync();
         }
+        public  void Save ()
+        {
+            db.SaveChanges();
+        }
     }
 }
